@@ -1,0 +1,117 @@
+<!-- Here's some metadata & other stuff to get started with our app -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ArcGIS Maps SDK Example</title>
+    <link rel="icon" href="favicon.ico?v=2" sizes="any" />
+    <link rel="shortcut icon" href="favicon.ico?v=2" type="image/x-icon" />
+  </head>
+
+  <body>
+    <!-- Let's define the structure for our application with calcite components -->
+    <calcite-shell>
+      <!-- This is the header section -->
+      <calcite-navigation slot="header">
+        <!-- Logo/title on the top left -->
+        <calcite-navigation-logo
+          slot="logo"
+          icon="map"
+          heading="ArcGIS Maps SDK"
+        ></calcite-navigation-logo>
+        <!-- Toggle button for legend on the top right -->
+        <calcite-action
+          slot="content-end"
+          icon="legend-right"
+          scale="l"
+          text="Show Legend"
+        ></calcite-action>
+      </calcite-navigation>
+
+      <!-- This is the map content area -->
+      <calcite-panel>
+        <!-- The map itself -->
+        <arcgis-map
+          item-id="05e015c5f0314db9a487a9b46cb37eca"
+          basemap="satellite"
+          popup-component-enabled
+        >
+          <!-- Map controls, which are children of the map component -->
+          <!-- We will add legend programmatically, later -->
+          <arcgis-zoom slot="bottom-left"></arcgis-zoom>
+          <arcgis-home slot="bottom-left"></arcgis-home>
+        </arcgis-map>
+      </calcite-panel>
+    </calcite-shell>
+
+    <!-- That's it for the UI! -->
+
+    <!-- Now we can add interactivity through JavaScript (JS) -->
+    <script>
+      (async () => {
+        // With vanilla JS, we need to manually select elements, like the map and the legend button
+        const arcgisMap = document.querySelector("arcgis-map");
+        const legendButton = document.querySelector("calcite-action");
+        let legendElement = null;
+
+        // We need to wait for the map to be ready before we can interact with it
+        // We use event listeners to know when the map is ready, and then we can do things
+        if (!arcgisMap.ready) {
+          arcgisMap.addEventListener("arcgisViewReadyChange", handleMapReady, {
+            once: true,
+          });
+        } else {
+          handleMapReady();
+        }
+
+        // This is the function that is triggered when the map is ready.
+        async function handleMapReady() {
+          // Let's get the view from the map, which is where we can interact with the map's UI and behavior
+          const view = arcgisMap.view;
+
+          // Let's customize the popup behavior
+          arcgisMap.popupElement.dockEnabled = true;
+          arcgisMap.popupElement.hideCloseButton = true;
+          arcgisMap.popupElement.hideActionBar = true;
+          arcgisMap.popupElement.dockOptions = {
+            buttonEnabled: false,
+            breakpoint: false,
+            position: "top-left",
+          };
+
+          // Now let's add interactivity to the legend button.
+          // When we click it, we want to toggle the visibility of the legend on the map.
+          let isVisible = false;
+          legendButton.addEventListener("click", () => {
+            isVisible = !isVisible;
+
+            if (isVisible) {
+              // Create the legend element if it doesn't exist
+              // Only happends the first time we click the button
+              if (!legendElement) {
+                legendElement = document.createElement("arcgis-legend");
+                legendElement.setAttribute("slot", "top-right");
+                legendElement.setAttribute("legend-style", "classic");
+                legendElement.setAttribute("auto-destroy-disabled", "");
+              }
+
+              // Append the legend to the map if it's not already there
+              arcgisMap.append(legendElement);
+            } else {
+              // Remove the legend from the map
+              legendElement.remove();
+            }
+          });
+        }
+      })();
+    </script>
+
+    <!-- We also need to load the ArcGIS Maps SDK and Calcite Components -->
+    <script type="module" src="https://js.arcgis.com/5.0"></script>
+    <script
+      type="module"
+      src="https://js.arcgis.com/calcite-components/5.0"
+    ></script>
+  </body>
+</html>
