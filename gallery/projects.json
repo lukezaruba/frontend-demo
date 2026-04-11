@@ -2,7 +2,7 @@
   {
     "title": "Sample Project",
     "author": "Luke Zaruba",
-    "image": "/gallery/assets/sample-thumbnail.png",
+    "image": "assets/sample-thumbnail.png",
     "tags": [
       {
         "icon": "tree",
