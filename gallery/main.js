@@ -101,7 +101,7 @@ function openDialog(proj) {
 
   const descP = document.createElement("p");
   descP.className = "dialog-description";
-  descP.textContent = proj.description;
+  descP.innerHTML = proj.description;
   dialogBody.appendChild(descP);
 
   const tagsDiv = document.createElement("div");
