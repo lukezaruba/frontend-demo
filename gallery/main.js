@@ -84,6 +84,11 @@ shuffled.forEach((proj, idx) => {
   footerEnd.appendChild(action);
   card.appendChild(footerEnd);
 
+  card.style.cursor = "pointer";
+  card.addEventListener("click", (e) => {
+    if (!e.target.closest("calcite-action")) openDialog(proj);
+  });
+
   grid.appendChild(card);
 });
 
