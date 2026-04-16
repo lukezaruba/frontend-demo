@@ -116,6 +116,26 @@ function openDialog(proj) {
   });
   dialogBody.appendChild(tagsDiv);
 
+  const existingLinks = dialog.querySelector(".dialog-links");
+  if (existingLinks) existingLinks.remove();
+
+  if (proj.links && proj.links.length > 0) {
+    const linksDiv = document.createElement("div");
+    linksDiv.className = "dialog-links";
+    linksDiv.setAttribute("slot", "footer-start");
+    proj.links.forEach((link) => {
+      const btn = document.createElement("calcite-button");
+      btn.setAttribute("appearance", "outline");
+      btn.setAttribute("scale", "s");
+      btn.setAttribute("href", link.url);
+      btn.setAttribute("target", "_blank");
+      btn.setAttribute("rel", "noopener noreferrer");
+      btn.textContent = link.text;
+      linksDiv.appendChild(btn);
+    });
+    dialog.appendChild(linksDiv);
+  }
+
   dialog.setAttribute("open", "");
 }
 

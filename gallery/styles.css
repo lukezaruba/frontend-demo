@@ -75,6 +75,12 @@ calcite-card img {
   gap: 6px;
 }
 
+.dialog-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
 /* Themes */
 .theme-light {
   --calcite-color-brand: #7a0019;
