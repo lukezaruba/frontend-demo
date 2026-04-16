@@ -5,6 +5,7 @@ body {
   font-family: var(--calcite-font-family, sans-serif);
   background: var(--calcite-color-background, #f3f3f3);
   color: var(--calcite-color-text-1);
+  --calcite-card-corner-radius: 15px;
 }
 
 calcite-navigation {
