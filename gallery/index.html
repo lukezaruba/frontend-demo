@@ -50,7 +50,33 @@
         appearance="transparent"
         scale="m"
       ></calcite-action>
+      <calcite-action
+        slot="content-end"
+        id="mobile-menu-btn"
+        icon="hamburger"
+        text="Menu"
+        title="Open menu"
+        appearance="transparent"
+        scale="m"
+      ></calcite-action>
     </calcite-navigation>
+
+    <calcite-sheet id="mobile-sheet" position="inline-start" label="Navigation">
+      <calcite-panel heading="Navigation" closable>
+        <calcite-list>
+          <calcite-list-item
+            label="MGIS Program"
+            href="https://cla.umn.edu/mgis/mgis-program"
+            target="_blank"
+          ></calcite-list-item>
+          <calcite-list-item
+            label="GeoCommons"
+            href="https://geocommons.umn.edu/"
+            target="_blank"
+          ></calcite-list-item>
+        </calcite-list>
+      </calcite-panel>
+    </calcite-sheet>
 
     <!-- Main content area -->
     <div class="page-content">

@@ -27,6 +27,11 @@ const dialog = document.getElementById("project-dialog");
 const dialogBody = document.getElementById("dialog-body");
 const closeBtn = document.getElementById("dialog-close-btn");
 
+// Mobile nav sheet
+const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+const mobileSheet = document.getElementById("mobile-sheet");
+mobileMenuBtn.addEventListener("click", () => mobileSheet.setAttribute("open", ""));
+
 const shuffled = shuffle(projects);
 
 shuffled.forEach((proj, idx) => {

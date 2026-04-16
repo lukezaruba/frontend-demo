@@ -134,5 +134,39 @@
         "url": "https://github.com"
       }
     ]
+  },
+  {
+    "title": "Sample Project 5",
+    "author": "Luke Zaruba",
+    "image": "assets/sample-thumbnail.png",
+    "tags": [
+      {
+        "icon": "tree",
+        "label": "Environment"
+      },
+      {
+        "icon": "h3-hexagon",
+        "label": "Spatial Analysis"
+      },
+      {
+        "icon": "deep-learning",
+        "label": "AI"
+      },
+      {
+        "icon": "urban-model",
+        "label": "Urban Planning"
+      }
+    ],
+    "description": "This is a fake project used as a placeholder to demonstrate the gallery layout and functionality. It includes multiple tags and a description to show how content will be displayed in the dialog. <a href=\"https://example.com\">Example link</a>",
+    "links": [
+      {
+        "text": "View App",
+        "url": "https://example.com"
+      },
+      {
+        "text": "GitHub",
+        "url": "https://github.com"
+      }
+    ]
   }
 ]
