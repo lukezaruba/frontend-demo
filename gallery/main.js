@@ -1,6 +1,25 @@
 // Loading project data
 import projects from "./projects.json" with { type: "json" };
 
+// Canonical category → Calcite icon mapping; unknown categories fall back to "analysis"
+const TAG_MAP = {
+  "Machine Learning & AI": "deep-learning",
+  "Robotics & Geospatial Technology": "drone-quadcopter",
+  "Cartography & Visualization": "map-pin",
+  "Network Analysis": "utility-network",
+  "Remote Sensing": "satellite-2-f",
+  "Urban Planning": "urban-model",
+  "Environment": "snow-thunder",
+  "Geoscience": "slice",
+  "Agriculture": "color-coded-map",
+  "Health": "medical",
+  "Natural Resource Management": "tree",
+  "Transportation": "bus",
+  "Independent (Preliminary) Research": "lightbulb",
+  "open-source": "open-book",
+  "coding-centric": "terminal",
+};
+
 // Function to shuffle array of projects for random display order on each load
 function shuffle(arr) {
   const a = [...arr];
@@ -11,13 +30,13 @@ function shuffle(arr) {
   return a;
 }
 
-// Dynamic chip creator for tags
-function createChip(tag, { showLabel = false } = {}) {
+// Dynamic chip creator for tags (accepts category string)
+function createChip(tagLabel, { showLabel = false } = {}) {
   const chip = document.createElement("calcite-chip");
-  chip.setAttribute("icon", tag.icon);
+  chip.setAttribute("icon", TAG_MAP[tagLabel] ?? "analysis");
   chip.setAttribute("scale", "s");
-  chip.setAttribute("value", tag.label);
-  if (showLabel) chip.textContent = tag.label;
+  chip.setAttribute("value", tagLabel);
+  if (showLabel) chip.textContent = tagLabel;
   return chip;
 }
 
@@ -30,7 +49,13 @@ const closeBtn = document.getElementById("dialog-close-btn");
 // Mobile nav sheet
 const mobileMenuBtn = document.getElementById("mobile-menu-btn");
 const mobileSheet = document.getElementById("mobile-sheet");
-mobileMenuBtn.addEventListener("click", () => mobileSheet.setAttribute("open", ""));
+const mobilePanel = document.getElementById("mobile-panel");
+mobileMenuBtn.addEventListener("click", () => {
+  mobilePanel.removeAttribute("closed");
+  mobileSheet.setAttribute("open", "");
+});
+// Closing the panel's built-in X button should also close the sheet
+mobilePanel.addEventListener("calcitePanelClose", () => mobileSheet.removeAttribute("open"));
 
 const shuffled = shuffle(projects);
 
@@ -43,7 +68,7 @@ shuffled.forEach((proj, idx) => {
   const img = document.createElement("img");
   img.setAttribute("slot", "thumbnail");
   img.setAttribute("alt", proj.title);
-  img.setAttribute("src", proj.image);
+  img.setAttribute("src", proj.thumbnail_image);
   card.appendChild(img);
 
   // Add heading
@@ -63,16 +88,16 @@ shuffled.forEach((proj, idx) => {
   footerStart.setAttribute("slot", "footer-start");
   footerStart.className = "chip-row";
 
-  proj.tags.slice(0, 3).forEach((tag, tIdx) => {
+  proj.tags.slice(0, 3).forEach((tagLabel, tIdx) => {
     const chipId = `chip-${idx}-${tIdx}`;
-    const chip = createChip(tag);
+    const chip = createChip(tagLabel);
     chip.setAttribute("id", chipId);
     footerStart.appendChild(chip);
 
     const tt = document.createElement("calcite-tooltip");
     tt.setAttribute("reference-element", chipId);
     tt.setAttribute("placement", "bottom");
-    tt.textContent = tag.label;
+    tt.textContent = tagLabel;
     footerStart.appendChild(tt);
   });
   card.appendChild(footerStart);
@@ -105,34 +130,35 @@ function openDialog(proj) {
   dialogBody.innerHTML = "";
 
   const img = document.createElement("img");
-  img.src = proj.image;
+  img.src = proj.popup_image;
   img.alt = proj.title;
   dialogBody.appendChild(img);
 
   const descP = document.createElement("p");
   descP.className = "dialog-description";
-  descP.innerHTML = proj.description;
+  descP.innerHTML = proj.long_description;
   dialogBody.appendChild(descP);
 
   const tagsDiv = document.createElement("div");
   tagsDiv.className = "dialog-tags";
-  proj.tags.forEach((tag) => {
-    tagsDiv.appendChild(createChip(tag, { showLabel: true }));
+  proj.tags.forEach((tagLabel) => {
+    tagsDiv.appendChild(createChip(tagLabel, { showLabel: true }));
   });
   dialogBody.appendChild(tagsDiv);
 
   const existingLinks = dialog.querySelector(".dialog-links");
   if (existingLinks) existingLinks.remove();
 
-  if (proj.links && proj.links.length > 0) {
+  const links = [proj.link_1, proj.link_2, proj.link_3].filter(Boolean);
+  if (links.length > 0) {
     const linksDiv = document.createElement("div");
     linksDiv.className = "dialog-links";
     linksDiv.setAttribute("slot", "footer-start");
-    proj.links.forEach((link) => {
+    links.forEach((link) => {
       const btn = document.createElement("calcite-button");
       btn.setAttribute("appearance", "outline");
       btn.setAttribute("scale", "s");
-      btn.setAttribute("href", link.url);
+      btn.setAttribute("href", link.link);
       btn.setAttribute("target", "_blank");
       btn.setAttribute("rel", "noopener noreferrer");
       btn.textContent = link.text;
